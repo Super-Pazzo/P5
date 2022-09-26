@@ -5,9 +5,22 @@ fetch("http://localhost:3000/api/products")
     console.log(data);
 
     //pour chaque produit dans data on récupère ces infos//
+    let produitHtml = "";
+
     for (let produit of data) {
-      //créé la balise a qui récupère l'id de chaque produit dans data//
-      let link = document.createElement("a");
+      produitHtml += `<a href="./product.html?id=${produit._id}">
+            <article>
+              <img src="${produit.imageUrl}" alt="${produit.altTxt}">
+              <h3 class="productName">${produit.name}</h3>
+              <p class="productDescription">${produit.description}</p>
+            </article>
+          </a> `;
+    }
+    document.querySelector("#items").innerHTML = produitHtml;
+  });
+
+//créé la balise a qui récupère l'id de chaque produit dans data//
+/*  let link = document.createElement("a");
       link.setAttribute("href", "./product.html?id=" + produit._id);
 
       //créé l'article qui devient enfant de link (balise "a")//
@@ -33,6 +46,4 @@ fetch("http://localhost:3000/api/products")
       article.appendChild(p);
 
       //récupère la balise items et on lui attribut l'ensemble de la balise "a"(link) en enfant //
-      document.querySelector("#items").appendChild(link);
-    }
-  });
+      document.querySelector("#items").appendChild(link); */

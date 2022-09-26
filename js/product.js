@@ -43,4 +43,24 @@ fetch(`http://localhost:3000/api/products/${id}`)
       selecteur.appendChild(colorSelect);
       console.log(document.createElement("option"));
     });
+    addProductCart(data);
   });
+
+//j'attribu mon id addToCart à ma variable bouton
+const addProductCart = () => {
+  let bouton = document.querySelector("#addToCart");
+  console.log(bouton);
+  //je dis à mon bouton quoi selectionner quand je click sur lui
+  bouton.addEventListener("click", () => {
+    let product = {
+      id: id,
+      color: document.querySelector("#colors").value,
+      quantity: parseInt(document.querySelector("#quantity").value),
+    };
+    if (product.quantity > 0 && product.quantity <= 100) {
+      addCart(product);
+    } else {
+      alert("Veuillez sélectionner une quantité entre 1 et 100");
+    }
+  });
+};
