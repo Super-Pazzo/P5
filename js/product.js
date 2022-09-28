@@ -1,20 +1,15 @@
 //récupère le lien URL
 const selectProduit = window.location.search;
-console.log(selectProduit);
 
 //cherche un paramètre dans l'url et récupère l'ID
 const urlParametre = new URLSearchParams(selectProduit);
-console.log(urlParametre);
 
 const id = urlParametre.get("id");
-console.log(id);
 
 //on récupère les infos produit dans l'api
 fetch(`http://localhost:3000/api/products/${id}`)
   .then((result) => result.json())
   .then((data) => {
-    console.log(data);
-
     //création de la balise img et devient enfant de item__img
     let itemImg = document.createElement("img");
     itemImg.setAttribute("src", data.imageUrl);
@@ -29,7 +24,6 @@ fetch(`http://localhost:3000/api/products/${id}`)
     //création d'une variable qui va chercher l'emplacement permettant de
     //placer mes éléments suivant
     let selecteur = document.querySelector("#colors");
-    console.log(selecteur);
 
     //pour chaques couleurs de mon (tableau) du produit dans data je créé une option
     data.colors.forEach((colors) => {
@@ -41,7 +35,6 @@ fetch(`http://localhost:3000/api/products/${id}`)
 
       //mes options deviennent l'enfant de ma variable qui correspond à la balise récupérée précédemment
       selecteur.appendChild(colorSelect);
-      console.log(document.createElement("option"));
     });
     addProductCart(data);
   });
@@ -49,7 +42,7 @@ fetch(`http://localhost:3000/api/products/${id}`)
 //j'attribu mon id addToCart à ma variable bouton
 const addProductCart = () => {
   let bouton = document.querySelector("#addToCart");
-  console.log(bouton);
+
   //je dis à mon bouton quoi selectionner quand je click sur lui
   bouton.addEventListener("click", () => {
     let product = {
@@ -57,10 +50,15 @@ const addProductCart = () => {
       color: document.querySelector("#colors").value,
       quantity: parseInt(document.querySelector("#quantity").value),
     };
-    if (product.quantity > 0 && product.quantity <= 100) {
+
+    if (
+      product.quantity > 0 &&
+      product.quantity <= 100 &&
+      product.color != ""
+    ) {
       addCart(product);
     } else {
-      alert("Veuillez sélectionner une quantité entre 1 et 100");
+      alert("Veuillez sélectionner une quantité entre 1 et 100 et une couleur");
     }
   });
 };
