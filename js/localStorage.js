@@ -1,3 +1,7 @@
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
 /**
  * récupère le panier dans le localStorage
  * @returns {Array} le panier si il existe sinon un tableau vide
@@ -27,7 +31,33 @@ function addCart(product) {
       productFound.quantity = 100;
     }
   }
+  saveCart(cart);
+}
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-  2;
+/**
+ * Supprimer un produit du localStorage
+ * @param {object} product le produit que l'on souhaite supprimer
+ */
+function removeFromCart(product) {
+  let cart = getCart();
+  cart = cart.filter((p) => p.id != product.id || p.color != product.color);
+  saveCart(cart);
+}
+
+/**
+ * met à jours la quantité d'un produit dans mon localstorage
+ * @param {object} product le produit dont on veut changer la quantité
+ */
+function changeQuantity(product) {
+  let cart = getCart();
+  let productFound = cart.find(
+    (p) => p.id == product.id && p.color == product.color
+  );
+  if (productFound != undefined) {
+    productFound.quantity = product.quantity;
+    if (productFound.quantity <= 0) {
+      removeFromCart(product);
+    }
+  }
+  saveCart(cart);
 }
