@@ -37,18 +37,28 @@ fetch("http://localhost:3000/api/products")
   `;
     });
     document.querySelector("#cart__items").innerHTML = cartDom;
+    displayTotal(cart);
 
+    //créé un évênement qui met à jour la quantité d'un produit dans le LS à pmartir de
+    //la valeur de l'input modifié
     let listInputQuantity = document.querySelectorAll(".itemQuantity");
     for (let input of listInputQuantity) {
       input.addEventListener("change", function (e) {
         const article = e.target.closest(".cart__item");
         changeQuantity({
-          quantity: e.target.value,
+          quantity: parseInt(e.target.value),
           color: article.dataset.color,
           id: article.dataset.id,
         });
+        cart.find(
+          (product) =>
+            product.id == article.dataset.id &&
+            product.color == article.dataset.color
+        ).quantity = parseInt(e.target.value);
+        displayTotal(cart);
       });
     }
+    //créé un évênement qui supprime l'article du localstorage et du panier quand on click
     let listDeleteButton = document.querySelectorAll(".deleteItem");
     for (let button of listDeleteButton) {
       button.addEventListener("click", function (e) {
@@ -58,6 +68,22 @@ fetch("http://localhost:3000/api/products")
           id: article.dataset.id,
         });
         article.remove();
+        cart = cart.filter(
+          (product) =>
+            product.id != article.dataset.id ||
+            product.color != article.dataset.color
+        );
+        displayTotal(cart);
       });
     }
   });
+function displayTotal(currentCart) {
+  let totalPrice = 0;
+  let totalQuantity = 0;
+  for (let product of currentCart) {
+    totalPrice += product.price * product.quantity;
+    totalQuantity += product.quantity;
+  }
+  document.querySelector("#totalPrice").innerHTML = totalPrice;
+  document.querySelector("#totalQuantity").innerHTML = totalQuantity;
+}
