@@ -88,6 +88,7 @@ function displayTotal(currentCart) {
   document.querySelector("#totalPrice").innerHTML = totalPrice;
   document.querySelector("#totalQuantity").innerHTML = totalQuantity;
 }
+//j'attribue les input dans form à fields
 let fields = document.querySelectorAll("form input");
 
 for (let field of fields) {
@@ -97,10 +98,12 @@ for (let field of fields) {
       e.target
         .closest(".cart__order__form__question")
         .querySelector("#error").innerText = "";
+      field.style.color = "black";
     } else {
       e.target
         .closest(".cart__order__form__question")
         .querySelector("#error").innerText = e.target.validationMessage;
+      field.style.color = "Red";
     }
   });
 }
