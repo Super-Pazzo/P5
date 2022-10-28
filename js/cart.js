@@ -77,6 +77,7 @@ fetch("http://localhost:3000/api/products")
       });
     }
   });
+//fonction qui calcule le prix et la quantité total et l'affiche
 function displayTotal(currentCart) {
   let totalPrice = 0;
   let totalQuantity = 0;
@@ -87,3 +88,28 @@ function displayTotal(currentCart) {
   document.querySelector("#totalPrice").innerHTML = totalPrice;
   document.querySelector("#totalQuantity").innerHTML = totalQuantity;
 }
+let fields = document.querySelectorAll("form input");
+
+for (let field of fields) {
+  field.addEventListener("keyup", (e) => {
+    let valid = e.target.checkValidity();
+    if (valid) {
+      e.target
+        .closest(".cart__order__form__question")
+        .querySelector("#error").innerText = "";
+    } else {
+      e.target
+        .closest(".cart__order__form__question")
+        .querySelector("#error").innerText = e.target.validationMessage;
+    }
+  });
+}
+let button = document.querySelector("#order");
+button.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (document.querySelector(".cart__order__form").checkValidity()) {
+    alert("formulaire valide");
+  } else {
+    alert("formulaire non valide");
+  }
+});
