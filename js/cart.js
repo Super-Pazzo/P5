@@ -91,6 +91,7 @@ function displayTotal(currentCart) {
 //j'attribue les input dans form à fields
 let fields = document.querySelectorAll("form input");
 
+//pour chaque field de fields, je met des conditions en parcourant l'élément et ses parents
 for (let field of fields) {
   field.addEventListener("keyup", (e) => {
     let valid = e.target.checkValidity();
@@ -107,11 +108,39 @@ for (let field of fields) {
     }
   });
 }
+//j'attribue button à mon bouton de validation et donne des conditions
 let button = document.querySelector("#order");
 button.addEventListener("click", (e) => {
   e.preventDefault();
   if (document.querySelector(".cart__order__form").checkValidity()) {
-    alert("formulaire valide");
+    let data = {
+      contact: {
+        firstName: document.querySelector("#firstName").value,
+        lastName: document.querySelector("#lastName").value,
+        address: document.querySelector("#address").value,
+        city: document.querySelector("#city").value,
+        email: document.querySelector("#email").value,
+      },
+      products: cart.map((product) => product.id),
+    };
+    console.log(data);
+    //envoie une requête http vers url
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((result) => result.json())
+      .then((data) => {
+        console.log(data);
+        window.location.assign(`confirmation.html?order_id=${data.orderId}`);
+      })
+      .catch(function (err) {
+        console.log(err);
+        alert("erreur");
+      });
   } else {
     alert("formulaire non valide");
   }
