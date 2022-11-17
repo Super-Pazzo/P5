@@ -1,5 +1,6 @@
 let cart = getCart();
 
+//je récupère les infos produits de l'API
 fetch("http://localhost:3000/api/products")
   .then((result) => result.json())
   .then((data) => {
